@@ -1,0 +1,7 @@
+FERRAMENTAS:
+- n8n
+- evolution api
+
+
+-- EVENTOS
+https://doc.evolution-api.com/v2/pt/configuration/webhooks

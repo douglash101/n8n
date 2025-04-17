@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    network_mode: "host"  # Permite acesso direto ao localhost do host
+    environment:
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      - GENERIC_TIMEZONE=America/Sao_Paulo  # Ajuste o fuso horário conforme necessário
+    volumes:
+      - n8n_data:/home/node/.n8n  # Persistência dos dados
+
+  evolution-api:
+    container_name: evolution_api
+    image: atendai/evolution-api:v2.1.1
+    restart: always
+    network_mode: "host"
+    ports:
+      - "9090:9090"
+    env_file:
+      - .env
+    volumes:
+      - evolution_store:/evolution/store
+      - evolution_instances:/evolution/instances
+
+  redis:
+    image: redis:latest
+    container_name: redis_cache
+    ports:
+      - "6379:6379"
+    command: redis-server  # Opcional: adiciona uma senha
+    network_mode: "host"
+volumes:
+  n8n_data:
+  evolution_store:
+  evolution_instances:
