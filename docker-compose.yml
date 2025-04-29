@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
 
   postgres:
@@ -7,7 +5,7 @@ services:
     container_name: postgres_db
     restart: always
     network_mode: "host"
-    environment:
+    env_file:
       - ./postgres/.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -26,7 +24,7 @@ services:
     container_name: n8n
     restart: unless-stopped
     network_mode: "host"
-    environment:
+    env_file:
       - ./n8n/.env
     volumes:
       - n8n_data:/home/node/.n8n

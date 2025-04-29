@@ -1,6 +1,12 @@
+n8n:
+- oque é.
+- como funcionar.
+- 
+
 FERRAMENTAS:
 - n8n
 - evolution api
+- 
 
 
 -- EVENTOS
