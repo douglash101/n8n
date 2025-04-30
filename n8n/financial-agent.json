@@ -1,0 +1,1903 @@
+{
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "368986e0-ea42-440e-9458-76f614bae3fd",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -1200,
+          60
+        ],
+        "id": "4a847275-f0cd-41f8-a45e-39b2eb247329",
+        "name": "Webhook",
+        "webhookId": "368986e0-ea42-440e-9458-76f614bae3fd"
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "value": "public",
+            "mode": "list",
+            "cachedResultName": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "users",
+            "mode": "list",
+            "cachedResultName": "users"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "phone_number": "={{ $('prepare_input').item.json.sender.phone }}",
+              "name": "={{ $('prepare_input').item.json.sender.name }}",
+              "created_at": "={{ $now }}",
+              "phone_number_wp": "={{ $('prepare_input').item.json.sender.phone_wpp }}"
+            },
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "phone_number",
+                "displayName": "phone_number",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "phone_number_wp",
+                "displayName": "phone_number_wp",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "name",
+                "displayName": "name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "created_at",
+                "displayName": "created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.5,
+        "position": [
+          -340,
+          620
+        ],
+        "id": "b5435fec-1847-4c31-9c23-ade544a3803a",
+        "name": "REGISTER NEW USER",
+        "credentials": {
+          "postgres": {
+            "id": "BirUuNJCboX5F0F6",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "descriptionType": "manual",
+          "toolDescription": "=<TransactionTypeInstructions>\n    <Role>Deve consultar os dados na tabela</Role>\n    <Instructions>\n        <Instruction01>\n            Deve buscar os dados aplicando as melhores práticas em performance.\n        </Instruction01>\n    </Instructions>\n</TransactionTypeInstructions>",
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "transaction_types",
+            "mode": "list",
+            "cachedResultName": "transaction_types"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgresTool",
+        "typeVersion": 2.5,
+        "position": [
+          940,
+          600
+        ],
+        "id": "e572f92d-8c5c-487c-bce7-80b0fa6a82f9",
+        "name": "GET_TRANSCATION_TYPE",
+        "credentials": {
+          "postgres": {
+            "id": "BirUuNJCboX5F0F6",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "descriptionType": "manual",
+          "toolDescription": "<CategoryInstructions>\n    <Role>Deve buscar os dados nas categorias de transaçãoes</Role>\n    <Instructions>\n        <Instruction01>\n            Deve buscar o melhor resultado para o usuario\n        </Instruction01>\n        <Instruction01>\n            Se o usuario solicitar um relatório, busque todos os registros.\n        </Instruction01>\n    </Instructions>\n</CategoryInstructions>",
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "categories",
+            "mode": "list",
+            "cachedResultName": "categories"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgresTool",
+        "typeVersion": 2.5,
+        "position": [
+          1120,
+          600
+        ],
+        "id": "b82275dd-2097-436d-8826-2c9404e0946a",
+        "name": "GET_TRANSCATION_CATEGORY",
+        "credentials": {
+          "postgres": {
+            "id": "BirUuNJCboX5F0F6",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "descriptionType": "manual",
+          "toolDescription": "=<TransactionInstructions>\n    <Role>Deve consultar os dados na tabela.</Role>\n    <Instructions>\n        <Instruction01>\n            Deve buscar os dados aplicando as melhores práticas em performance.\n        </Instruction01>\n        <Instruction02>\n            Deve considerar utilizar between quando solicitar por data.\n        </Instruction02>\n        <Instruction03>\n            Caso seja solicitado relatório, deve ser somado na query.\n        </Instruction03>\n    </Instructions>\n</TransactionInstructions>",
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "transactions",
+            "mode": "list",
+            "cachedResultName": "transactions"
+          },
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', `utilize o atributo \"transaction_date\" para distinguir o tempo dos dados.`, 'boolean') }}",
+          "where": {
+            "values": [
+              {
+                "column": "user_id",
+                "value": "={{ $('GET USER').item.json.id }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgresTool",
+        "typeVersion": 2.5,
+        "position": [
+          1360,
+          20
+        ],
+        "id": "b067748a-b287-4009-a347-b98e89e83b5a",
+        "name": "GET_TRANSCATION_REPORT",
+        "credentials": {
+          "postgres": {
+            "id": "BirUuNJCboX5F0F6",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gpt-4o-mini"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          80,
+          240
+        ],
+        "id": "111e3658-4cd5-4196-85fe-1203ff642ace",
+        "name": "OpenAI Chat Model2",
+        "credentials": {
+          "openAiApi": {
+            "id": "baTia4Ert4KtVVIR",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $('EXTRACTOR').item.json.output.output_type }}",
+                      "rightValue": "report",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "871110d4-8802-4075-bc34-3d611e2e34bd"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "=report"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "ba8aba16-1f8c-4207-9c1a-d2958f853f8f",
+                      "leftValue": "={{ $('EXTRACTOR').item.json.output.output_type }}",
+                      "rightValue": "transaction",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "transaction"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "9d595694-da39-4b51-a081-68cc8744a3f7",
+                      "leftValue": "={{ $('EXTRACTOR').item.json.output.output_type }}",
+                      "rightValue": "any",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          400,
+          60
+        ],
+        "id": "10a6d5ff-53c2-4141-bed6-e154aa885337",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $('prepare_input').item.json.text.message }}",
+          "options": {
+            "systemMessage": "=<AgentInstructions>\n    <Role>\n        <Name>Agente Financeiro Pessoal</Name>\n        <Description>Um agente que ajuda a gerenciar finanças pessoais, criando relatórios de gastos ou ganhos com base nas transações do usuário.</Description>\n    </Role>\n\n    <Goal>\n        <Primary>Fornecer relatórios financeiros precisos e úteis</Primary>\n        <Secondary>Ajudar o usuário a controlar seus gastos e melhorar sua gestão financeira</Secondary>\n    </Goal>\n\n    <Context>\n        <Platform>Aplicativo de finanças pessoais</Platform>\n        <Audience>Usuários que desejam gerenciar suas finanças de forma eficaz</Audience>\n    </Context>\n\n    <ToneAndPersonality>\n        <Description>Amigável, engraçado, objetiva e com emojis quando aplicável.</Description>\n    </ToneAndPersonality>\n\n    <Instructions>\n        <Instruction01>Verificar a entrada do usuário e identificar o tipo de relatório desejado (gastos ou ganhos) e consultar na tool [GET_TRANSCATION_REPORT] </Instruction01>\n        <Instruction02>Utilizar a coluna [transaction_date] para considerar a data da transação, hoje, ontem, ou uma data passada pelo usuario. Considerando hoje com a data atual de {{ $now }}</Instruction02>\n        <Instruction03>Calcular os gastos ou ganhos utilizando a coluna [amount]</Instruction03>\n        <Instruction04>Oferecer sugestões de melhoria para a gestão financeira do usuário, quando apropriado</Instruction04>\n    </Instructions>\n\n    <Constraints>\n        <Constraint01>Manter a confidencialidade das informações financeiras do usuário</Constraint01>\n        <Constraint02>Não fornecer conselhos financeiros ou investimentos</Constraint02>\n        <Constraint03>Não invente valores, somente os encontrados no banco de dados</Constraint03>\n        <Constraint04>Caso não exista valor na tool [GET_TRANSCATION_REPORT], pare o fluxo e responda.</Constraint04>\n    </Constraints>\n\n    <Examples>\n        \n        <Example01>\n            <UserInput>Quais foram meus gastos no mês passado?</UserInput>\n            <AgentOutput>De acordo com nossos registros, seus gastos no mês passado foram de R$ 1.500,00, com a maioria das despesas em alimentação e transporte.</AgentOutput>\n        </Example01>\n        \n        <Example02>\n            <UserInput>Quais foram meus ganhos no trimestre atual?</UserInput>\n            <AgentOutput>De acordo com nossos registros, seus ganhos no trimestre atual foram de R$ 10.000,00, com a maioria das receitas provenientes de salário e investimentos.</AgentOutput>\n        </Example02>\n    </Examples>\n\n    <SuccessMetrics>\n        <Metric01>Precisão dos relatórios financeiros</Metric01>\n        <Metric02>Satisfação do usuário com a experiência de gerenciamento financeiro</Metric02>\n    </SuccessMetrics>\n\n    <FallbackStrategies>\n        <Strategy01>Se não houver transações suficientes para gerar um relatório, informar ao usuário que é necessário mais dados</Strategy01>\n        <Strategy02>Se houver uma falha no banco de dados, informar ao usuário que estamos trabalhando para resolver o problema</Strategy02>\n    </FallbackStrategies>\n</AgentInstructions>"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 1.8,
+        "position": [
+          960,
+          -200
+        ],
+        "id": "7d8fd65a-8b7b-4659-88ce-106b3c71303e",
+        "name": "REPORT AGENT",
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $('prepare_input').item.json.text.message || $('formata saida de audio texto').item.json.message }}",
+          "options": {
+            "systemMessage": "=<AgentInstructions>\n    <Role>\n        <Name>Agente de Finanças Pessoal</Name>\n        <Description>Um assistente que ajuda a gerenciar despesas e ganhos diários</Description>\n    </Role>\n\n    <Goal>\n        <Primary>Manter um registro preciso e atualizado das despesas e ganhos diários do usuário</Primary>\n        <Secondary>Fornecer dicas e recomendações para melhoria da gestão financeira</Secondary>\n    </Goal>\n\n    <Context>\n        <Platform>Mobile App</Platform>\n        <Audience>Usuários que desejam gerenciar suas finanças de forma eficiente</Audience>\n    </Context>\n\n    <ToneAndPersonality>\n        <Description>Amigável, engraçado, objetiva e com emojis quando aplicável.</Description>\n    </ToneAndPersonality>\n\n    <Instructions>\n        <Instruction01>Gravar a transação feita pelo usuario, podendo ser uma despesa ou um ganho. Se o usuário informar uma data ou passar como \"ontem\", \"amanhã\", considere ela para gravar, caso não informe, a data será hoje usando sempre no formato \"YYYY-MM-DD\".</Instruction01>\n        <Instruction02>Consultar o tipo de transação que está sendo feita na tool [GET_TRANSCATION_TYPE]</Instruction02>\n        <Instruction03>Consultar a categoria de transação que está sendo feita na tool [GET_TRANSCATION_CATEGORY] </Instruction03>\n        <Instruction04>Considere usar a data atual de {{ $now }} como parâmetro</Instruction04>\n        <Instruction05>Deve deletar um registro, caso o usuário solicite.</Instruction05>\n        <Instruction06>Deve atualizar um registro, caso o usuário solicite, sempre pergunte o ID caso não é passado.</Instruction06>\n        <Instruction07>Sempre deve ter o valor da transação, caso não tenha solicite o valor.</Instruction07>\n    </Instructions>\n\n    <Constraints>\n        <Constraint01>Não fornecer aconselhamento financeiro profissional</Constraint01>\n        <Constraint02>Não armazenar informações financeiras confidenciais</Constraint02>\n        <Constraint03>Se você não entender oque ele quis dizer, responda solicitando para ser mais claro</Constraint03>\n        <Constraint04>Responda somente o que tiver no seu dominio</Constraint04>\n    </Constraints>\n\n    <Examples>\n        <Example01>\n            <UserInput>Salario 2500</UserInput>\n            <AgentOutput>ID: #55\n📌 Detalhes do Salário\n💰 Valor a Receber: R$ 2.500,00\n📅 Data: 20/05/2025\n🔔 Mensagem: {mensagem legal}</AgentOutput>\n        </Example01>\n        <Example02>\n            <UserInput>Almoço 200</UserInput>\n            <AgentOutput>ID: #44\n📌 Almoço\n💰 Valor: R$ 200,00\n📅 Data: 20/05/2025\n🔔 Mensagem: {mensagem legal}</AgentOutput>\n        </Example02>\n        <Example03>\n            <UserInput>Oi</UserInput>\n            <AgentOutput>Olá {{ $('prepare_input').item.json.sender.name }} tudo bem? O que vai ser hoje?</AgentOutput>\n        </Example03>\n    </Examples>\n\n    <SuccessMetrics>\n        <Metric01></Metric01>\n    </SuccessMetrics>\n\n    <FallbackStrategies>\n        <Strategy01></Strategy01>\n    </FallbackStrategies>\n</AgentInstructions>"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 1.8,
+        "position": [
+          960,
+          240
+        ],
+        "id": "cc8cd43b-7ef8-4adc-91ba-6e48c09bfd10",
+        "name": "TRANSACTION AGENT",
+        "retryOnFail": false,
+        "executeOnce": false
+      },
+      {
+        "parameters": {
+          "content": "## REPORT",
+          "height": 380,
+          "width": 880,
+          "color": 5
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          660,
+          -240
+        ],
+        "id": "e531b595-ffb6-495c-b144-d407cf4b39c6",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gpt-4o-mini"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          780,
+          0
+        ],
+        "id": "9187166d-e8d3-4e1d-98bb-59b69a7174b2",
+        "name": "OPEN_1",
+        "credentials": {
+          "openAiApi": {
+            "id": "baTia4Ert4KtVVIR",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gpt-4o-mini"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          700,
+          420
+        ],
+        "id": "58bebdf3-cb84-45ee-8852-10fa5d41dc91",
+        "name": "OPEN_2",
+        "credentials": {
+          "openAiApi": {
+            "id": "baTia4Ert4KtVVIR",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "## TRANSACTION",
+          "height": 600,
+          "width": 1140,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          660,
+          220
+        ],
+        "id": "7110922b-eca7-4b0d-9025-70d40ad55dc1",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "descriptionType": "manual",
+          "toolDescription": "<CategoryInstructions>\n    <Role>Deve buscar os dados nas categorias de transaçãoes</Role>\n    <Instructions>\n        <Instruction01>\n            Deve buscar o melhor resultado para o usuario\n        </Instruction01>\n        <Instruction01>\n            Se o usuario solicitar um relatório, busque todos os registros.\n        </Instruction01>\n    </Instructions>\n</CategoryInstructions>",
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "categories",
+            "mode": "list",
+            "cachedResultName": "categories"
+          },
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgresTool",
+        "typeVersion": 2.5,
+        "position": [
+          1080,
+          0
+        ],
+        "id": "efbc4064-f312-43fa-a549-739573e51e7a",
+        "name": "GET_TRANSCATION_CATEGORY1",
+        "credentials": {
+          "postgres": {
+            "id": "BirUuNJCboX5F0F6",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "batchSize": "=1",
+          "options": {
+            "reset": false
+          }
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          120,
+          840
+        ],
+        "id": "5a44ed48-971e-47dc-818c-ada0ef98aec0",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "jsCode": "const name = $input.first().json.name;\n\nconst welcome = {\n  messages: [\n    {\n      \"message\": `Olá, ${name}! 👋\\\\nSeja muito bem-vindo(a) ao FinZap — seu sistema inteligente de controle financeiro.`\n    },\n    {\n      \"message\": \"Estamos aqui para ajudar você a organizar suas finanças de forma simples, segura e eficiente. 💼\"\n    },\n    {\n      \"message\": \"Aqui vão alguns exemplos de comandos que você pode usar:\\\\n\\\\n🛒 *mercado 200,00* — para registrar um gasto\\\\n💵 *recebi 2500,00* — para registrar um ganho\\\\n📊 *quanto gastei hoje* — para consultar seus gastos do dia\\\\n📅 *extrato da semana* — para ver o resumo semanal\\\\n💰 *quanto tenho* — para saber seu saldo atual\"\n    },\n    {\n      \"message\": \"✅ Sempre que precisar, é só nos chamar por aqui.\\\\nDesejamos uma excelente experiência!\\\\n\\\\n— Equipe FinZap\"\n    }\n  ]\n};\n\nreturn welcome;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -100,
+          620
+        ],
+        "id": "c78d5100-b48a-44b8-8221-576bf9e8eebf",
+        "name": "Code"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "messages",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          120,
+          620
+        ],
+        "id": "8d1e8b71-685e-4a35-9616-11cfa217d543",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "content": "## WELCOME",
+          "height": 720,
+          "width": 740,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -440,
+          500
+        ],
+        "typeVersion": 1,
+        "id": "f7ab1e93-329a-46ad-8fee-1e39c0285a23",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "amount": 4
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          -100,
+          780
+        ],
+        "id": "532d9b4a-fd02-48ad-81e2-53197d9cc5e0",
+        "name": "Wait1",
+        "webhookId": "75f43d7a-08e8-495c-b063-425ff3afdd51"
+      },
+      {
+        "parameters": {
+          "text": "={{ $('prepare_input').item.json.text.message || $('formata saida de audio texto').item.json.message }}",
+          "schemaType": "fromJson",
+          "jsonSchemaExample": "{\n  \"output_type\": \"transaction\"\n}\n",
+          "options": {
+            "systemPromptTemplate": "=<CategoryInstructions>\n    <Instruction>\n        Com base no questionamento, analise se é uma transação, dúvida, saudações ou relatório.\n    </Instruction>\n    <Constants>\n        report, transaction\n    </Constants>\n    <Examples>\n        <Example01>\n            <UserInput>\n                Quanto gastei hoje?\n            </UserInput>\n            <Output>\n                report\n            </Output>\n        </Example01>\n        <Example02>\n            <UserInput>\n                Comida 200\n            </UserInput>\n            <Output>\n                transaction\n            </Output>\n        </Example02>\n        <Example03>\n            <UserInput>\n                Oi bom dia\n            </UserInput>\n            <Output>\n                transaction\n            </Output>\n        </Example03>\n        <Example04>\n            <UserInput>\n                14\n            </UserInput>\n            <Output>\n                transaction\n            </Output>\n        </Example04>\n    </Examples>\n</CategoryInstructions>"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+        "typeVersion": 1,
+        "position": [
+          40,
+          60
+        ],
+        "id": "11e66abe-7f82-4398-ae92-d88150ec9d91",
+        "name": "EXTRACTOR"
+      },
+      {
+        "parameters": {
+          "resource": "audio",
+          "operation": "transcribe",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.openAi",
+        "typeVersion": 1.8,
+        "position": [
+          -160,
+          -180
+        ],
+        "id": "ee066821-a861-4f17-b1f6-488719779496",
+        "name": "OpenAI",
+        "credentials": {
+          "openAiApi": {
+            "id": "baTia4Ert4KtVVIR",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "toBinary",
+          "sourceProperty": "audio.base64",
+          "options": {
+            "fileName": "contact-audio.ogg",
+            "mimeType": "={{ $('prepare_input').item.json.audio.mime_type }}"
+          }
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          -380,
+          -180
+        ],
+        "id": "48b1c842-9a24-42cb-866b-780a28a4b154",
+        "name": "Convert to File"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "9f150f2e-67bd-422f-b6e4-38970ff2606b",
+                "name": "message",
+                "value": "={{ $json.text }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -380,
+          40
+        ],
+        "id": "4a386d5d-feba-4770-85ce-1e66a8f0b46d",
+        "name": "formata saida de audio texto"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "b1c4d890-dd6f-482f-b1fd-6102ff97a926",
+                      "leftValue": "={{ $json.message_type }}",
+                      "rightValue": "audioMessage",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Saída de Audio"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "2703e044-1f52-4697-b7ab-31e41f1f995b",
+                      "leftValue": "={{ $json.message_type }}",
+                      "rightValue": "conversation",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Saída de Texto"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          -780,
+          60
+        ],
+        "id": "6df4279d-d0a0-4eeb-a169-fde869166eb4",
+        "name": "Switch1"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "1cd798d0-8fbe-4eb7-8571-9637e1571628",
+                "name": "instance",
+                "value": "={{ $json.body.instance }}",
+                "type": "string"
+              },
+              {
+                "id": "8d6c0c8d-44bd-4ea7-8be0-48ff8e17a23a",
+                "name": "sender.phone_wpp",
+                "value": "={{ $json.body.data.key.remoteJid }}",
+                "type": "string"
+              },
+              {
+                "id": "f0666221-dc24-4c2e-b84b-c3088c796dee",
+                "name": "sender.phone",
+                "value": "={{ $json.body.data.key.remoteJid.split('@')[0] }}",
+                "type": "string"
+              },
+              {
+                "id": "44705f77-a370-4450-9600-0cd0c45724f4",
+                "name": "sender.name",
+                "value": "={{ $json.body.data.pushName }}",
+                "type": "string"
+              },
+              {
+                "id": "2652709c-aaa7-41be-ab98-0268624c5f24",
+                "name": "message_type",
+                "value": "={{ $json.body.data.messageType }}",
+                "type": "string"
+              },
+              {
+                "id": "84ab30c4-e2bf-406f-81c4-4b0d8ce2c10e",
+                "name": "api_key",
+                "value": "={{ $json.body.apikey }}",
+                "type": "string"
+              },
+              {
+                "id": "18b2f704-804e-4f74-898f-2cfd51b0f80e",
+                "name": "message_id",
+                "value": "={{ $json.body.data.key.id }}",
+                "type": "string"
+              },
+              {
+                "id": "ee757319-67a9-4580-b435-43ab09a81805",
+                "name": "text.message",
+                "value": "={{ $json.body.data.message.conversation }}",
+                "type": "string"
+              },
+              {
+                "id": "03d1e201-7a92-4aff-8ece-4f1da5723eba",
+                "name": "audio.mime_type",
+                "value": "={{ $json.body.data.message.audioMessage.mimetype }}",
+                "type": "string"
+              },
+              {
+                "id": "b52b95ca-c89d-4dc0-942b-3c70af7bb9df",
+                "name": "audio.base64",
+                "value": "={{ $json.body.data.message.base64 }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -980,
+          60
+        ],
+        "id": "378fa2dd-f751-480f-8896-48de8dde2324",
+        "name": "prepare_input"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "54b5aaf8-01c2-477d-9b60-fde0475a83fe",
+                "leftValue": "={{ $json.id }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "number",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -160,
+          260
+        ],
+        "id": "5fa1c225-2d4a-4c3c-bf9f-824678e0d1ee",
+        "name": "existe cadastro?"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=http://localhost:8080/message/sendText/{{ $('prepare_input').item.json.instance }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "={{ $('prepare_input').item.json.api_key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"number\": \"{{ $('REGISTER NEW USER').item.json.phone_number_wp }}\",\n  \"text\": \"{{ $('Loop Over Items').item.json.message }}\"\n}\n",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -340,
+          780
+        ],
+        "id": "90e95a0b-720b-419f-9fc4-d785254205fe",
+        "name": "reply welcome to user"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=http://localhost:8080/chat/sendPresence/{{ $('prepare_input').item.json.instance }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "={{ $('prepare_input').item.json.api_key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n    \"number\": \"{{ $('prepare_input').item.json.sender.phone_wpp }}\",\n    \"delay\": 1200,\n    \"presence\": \"composing\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          120,
+          1020
+        ],
+        "id": "cc97f2f8-b472-4615-bb44-915f88617263",
+        "name": "composing"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          360,
+          780
+        ],
+        "id": "2a6948c3-0ec6-4f45-9e54-d41232c2af75",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "value": "public",
+            "mode": "list",
+            "cachedResultName": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "users",
+            "mode": "list",
+            "cachedResultName": "users"
+          },
+          "returnAll": true,
+          "where": {
+            "values": [
+              {
+                "column": "phone_number",
+                "value": "={{ $('prepare_input').item.json.sender.phone }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.5,
+        "position": [
+          -380,
+          260
+        ],
+        "id": "772d9ddb-dc98-4e77-9f5f-34938bef80de",
+        "name": "GET USER",
+        "alwaysOutputData": true,
+        "credentials": {
+          "postgres": {
+            "id": "BirUuNJCboX5F0F6",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=http://localhost:8080/chat/markMessageAsRead/{{ $('prepare_input').item.json.instance }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "={{ $('prepare_input').item.json.api_key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"readMessages\": [\n    {\n      \"remoteJid\": \"{{ $json.sender.phone_wpp }}\",\n      \"fromMe\": false,\n      \"id\": \"{{ $json.message_id }}\"\n    }\n  ]\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -780,
+          -140
+        ],
+        "id": "6d7d8595-031a-4906-ba6d-9b565e3e2491",
+        "name": "read message"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "a87f8b28-d694-48e4-a9d6-19797e48b0b9",
+                "name": "output.",
+                "value": "={{ $json.output }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1620,
+          40
+        ],
+        "id": "690ab556-a5b3-4322-9450-e92a6006e81d",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $('EXTRACTOR').item.json.output.output_type }}",
+                      "rightValue": "report",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "871110d4-8802-4075-bc34-3d611e2e34bd"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "=report"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "ba8aba16-1f8c-4207-9c1a-d2958f853f8f",
+                      "leftValue": "={{ $('EXTRACTOR').item.json.output.output_type }}",
+                      "rightValue": "transaction",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "transaction"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          1800,
+          40
+        ],
+        "id": "560d9b60-cfb2-4709-824b-950a540920b4",
+        "name": "Switch2"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=http://localhost:8080/message/sendText/{{ $('prepare_input').item.json.instance }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "={{ $('prepare_input').item.json.api_key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"number\": \"{{ $('prepare_input').item.json.sender.phone_wpp }}\",\n  \"text\": \"{{ $('REPORT AGENT').item.json.output.replaceAll(\"\\\"\",'\\'').replaceAll('\\n','\\\\n') }}\"\n}\n",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2000,
+          -60
+        ],
+        "id": "33eaa883-ad24-4713-88af-53475c3bb5a3",
+        "name": "reply report"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=http://localhost:8080/message/sendText/{{ $('prepare_input').item.json.instance }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "={{ $('prepare_input').item.json.api_key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"number\": \"{{ $('prepare_input').item.json.sender.phone_wpp }}\",\n  \"text\": \"{{ $('TRANSACTION AGENT').item.json.output.replaceAll(\"\\\"\",'\\'').replaceAll('\\n','\\\\n') }}\"\n}\n",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2000,
+          160
+        ],
+        "id": "61ba07f2-112b-4bd6-a70d-3b7a3cc8905a",
+        "name": "reply transaction"
+      },
+      {
+        "parameters": {
+          "descriptionType": "manual",
+          "toolDescription": "=<DeleteTransactionInstructions>\n    <Role>Deletar os dados de transação.</Role>\n    <Instructions>\n        <Instruction01>\n            Delete o dado de acordo com ID passado pelo usuario.\n        </Instruction01>\n    </Instructions>\n</DeleteTransactionInstructions>",
+          "operation": "deleteTable",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "transactions",
+            "mode": "list",
+            "cachedResultName": "transactions"
+          },
+          "deleteCommand": "delete",
+          "where": {
+            "values": [
+              {
+                "column": "id",
+                "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', ``, 'string') }}"
+              },
+              {
+                "column": "user_id",
+                "value": "={{ $('GET USER').item.json.id }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgresTool",
+        "typeVersion": 2.5,
+        "position": [
+          1440,
+          600
+        ],
+        "id": "4ac46c51-f421-46eb-89ad-768b50f833da",
+        "name": "DELETE_TRANSCATION",
+        "credentials": {
+          "postgres": {
+            "id": "BirUuNJCboX5F0F6",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "descriptionType": "manual",
+          "toolDescription": "=<CreatorTransactionInstructions>\n    <Role>Deve registrar uma nova transação</Role>\n    <Instructions>\n        <Instruction01>\n           Registrar uma nova transação\n        </Instruction01>\n    </Instructions>\n</CreatorTransactionInstructions>",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "transactions",
+            "mode": "list",
+            "cachedResultName": "transactions"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "user_id": "={{ $('GET USER').item.json.id }}",
+              "type_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('type_id', ``, 'number') }}",
+              "category_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('category_id', ``, 'number') }}",
+              "amount": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('amount', ``, 'number') }}",
+              "description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('description', ``, 'string') }}",
+              "transaction_date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('transaction_date', ``, 'string') }}",
+              "created_at": "={{ $now }}"
+            },
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "user_id",
+                "displayName": "user_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "type_id",
+                "displayName": "type_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "category_id",
+                "displayName": "category_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "amount",
+                "displayName": "amount",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "description",
+                "displayName": "description",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "transaction_date",
+                "displayName": "transaction_date",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "created_at",
+                "displayName": "created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgresTool",
+        "typeVersion": 2.5,
+        "position": [
+          1280,
+          600
+        ],
+        "id": "df8f8102-783b-4da7-964b-a41eccf87f23",
+        "name": "CREATE_TRANSACTION",
+        "credentials": {
+          "postgres": {
+            "id": "BirUuNJCboX5F0F6",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "descriptionType": "manual",
+          "toolDescription": "=<UpdateTransactionInstructions>\n    <Role>Atualizar uma transação</Role>\n    <Instructions>\n        <Instruction01>\n            Altere a transação do usuário.\n        </Instruction01>\n    </Instructions>\n</UpdateTransactionInstructions>",
+          "operation": "update",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "transactions",
+            "mode": "list",
+            "cachedResultName": "transactions"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('id__using_to_match_', ``, 'number') }}",
+              "user_id": "={{ $('GET USER').item.json.id }}",
+              "type_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('type_id', ``, 'number') }}",
+              "category_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('category_id', ``, 'number') }}",
+              "amount": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('amount', ``, 'number') }}",
+              "description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('description', ``, 'string') }}",
+              "transaction_date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('transaction_date', ``, 'string') }}"
+            },
+            "matchingColumns": [
+              "id",
+              "user_id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "user_id",
+                "displayName": "user_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "type_id",
+                "displayName": "type_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "category_id",
+                "displayName": "category_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "amount",
+                "displayName": "amount",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "description",
+                "displayName": "description",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "transaction_date",
+                "displayName": "transaction_date",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "created_at",
+                "displayName": "created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgresTool",
+        "typeVersion": 2.5,
+        "position": [
+          1620,
+          600
+        ],
+        "id": "50753cb1-0114-4698-b519-7d16fa616521",
+        "name": "UPDATE_TRANSACTION",
+        "credentials": {
+          "postgres": {
+            "id": "BirUuNJCboX5F0F6",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $('prepare_input').item.json.sender.phone }}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          720,
+          600
+        ],
+        "id": "ce0841a5-7c6f-4df1-9bbd-4f92c99c5687",
+        "name": "Simple Memory"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          2200,
+          60
+        ],
+        "id": "78774935-384e-4de2-bdf6-8c7b9fb6b493",
+        "name": "No Operation, do nothing1"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          -380,
+          -360
+        ],
+        "id": "e402ae30-a5d1-4858-9871-c1f51f55092d",
+        "name": "No Operation, do nothing2"
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $('prepare_input').item.json.sender.phone }}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          920,
+          0
+        ],
+        "id": "25b88108-e8fe-42de-847a-20058c9c4fa3",
+        "name": "Simple Memory1"
+      },
+      {
+        "parameters": {
+          "content": "## DATA BASE TOOL",
+          "height": 220,
+          "width": 880,
+          "color": 7
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          880,
+          560
+        ],
+        "id": "042ee7dd-2b5f-4969-b2df-01723583ad7b",
+        "name": "Sticky Note3"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "prepare_input",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "REGISTER NEW USER": {
+        "main": [
+          [
+            {
+              "node": "Code",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GET_TRANSCATION_TYPE": {
+        "ai_tool": [
+          [
+            {
+              "node": "TRANSACTION AGENT",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GET_TRANSCATION_CATEGORY": {
+        "ai_tool": [
+          [
+            {
+              "node": "TRANSACTION AGENT",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GET_TRANSCATION_REPORT": {
+        "ai_tool": [
+          [
+            {
+              "node": "REPORT AGENT",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model2": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "EXTRACTOR",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "REPORT AGENT",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "TRANSACTION AGENT",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "REPORT AGENT": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "TRANSACTION AGENT": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OPEN_1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "REPORT AGENT",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OPEN_2": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "TRANSACTION AGENT",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GET_TRANSCATION_CATEGORY1": {
+        "ai_tool": [
+          [
+            {
+              "node": "REPORT AGENT",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "composing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "EXTRACTOR": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI": {
+        "main": [
+          [
+            {
+              "node": "formata saida de audio texto",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Convert to File": {
+        "main": [
+          [
+            {
+              "node": "OpenAI",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "formata saida de audio texto": {
+        "main": [
+          [
+            {
+              "node": "GET USER",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch1": {
+        "main": [
+          [
+            {
+              "node": "Convert to File",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "GET USER",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "prepare_input": {
+        "main": [
+          [
+            {
+              "node": "Switch1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "read message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "existe cadastro?": {
+        "main": [
+          [
+            {
+              "node": "EXTRACTOR",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "REGISTER NEW USER",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "reply welcome to user": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "composing": {
+        "main": [
+          [
+            {
+              "node": "reply welcome to user",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GET USER": {
+        "main": [
+          [
+            {
+              "node": "existe cadastro?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "read message": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Switch2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch2": {
+        "main": [
+          [
+            {
+              "node": "reply report",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "reply transaction",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "reply report": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "reply transaction": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "DELETE_TRANSCATION": {
+        "ai_tool": [
+          [
+            {
+              "node": "TRANSACTION AGENT",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CREATE_TRANSACTION": {
+        "ai_tool": [
+          [
+            {
+              "node": "TRANSACTION AGENT",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "UPDATE_TRANSACTION": {
+        "ai_tool": [
+          [
+            {
+              "node": "TRANSACTION AGENT",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simple Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "TRANSACTION AGENT",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simple Memory1": {
+        "ai_memory": [
+          [
+            {
+              "node": "REPORT AGENT",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "pinData": {},
+    "meta": {
+      "templateCredsSetupCompleted": true,
+      "instanceId": "6617f74ec0b59350c2ed872c79f41e52f7950ad3f974d162c3fccba908fc5333"
+    }
+  }

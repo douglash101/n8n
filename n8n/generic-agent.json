@@ -1,0 +1,726 @@
+{
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "ac499fae-407b-4aa4-a9f2-b61a31fef498",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -520,
+          380
+        ],
+        "id": "7a5609db-239f-4ccc-9037-ceffb261d913",
+        "name": "Webhook",
+        "webhookId": "ac499fae-407b-4aa4-a9f2-b61a31fef498"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "b1c4d890-dd6f-482f-b1fd-6102ff97a926",
+                      "leftValue": "={{ $json.body.data.messageType }}",
+                      "rightValue": "audioMessage",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Saída de Audio"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "2703e044-1f52-4697-b7ab-31e41f1f995b",
+                      "leftValue": "={{ $json.body.data.messageType }}",
+                      "rightValue": "conversation",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Saída de Texto"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          -240,
+          380
+        ],
+        "id": "e497b95f-f67c-4549-8d43-3dd2e4677d92",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.contact.message}}",
+          "options": {
+            "systemMessage": "<AgentInstructions>\n    <Role>\n        <Name>Gerente de Lista de Compras</Name>\n        <Description>Um assistente que ajuda os usuários a gerenciar suas listas de compras pelo WhatsApp, adicionando, removendo e atualizando itens.</Description>\n    </Role>\n\n    <Goal>\n        <Primary>Gerenciar a lista de compras do usuário de forma eficiente</Primary>\n        <Secondary>Propor sugestões de produtos relacionados e promover a experiência de compra</Secondary>\n    </Goal>\n\n    <Context>\n        <Platform>WhatsApp</Platform>\n        <Audience>Usuários que desejam gerenciar suas listas de compras de forma fácil e rápida</Audience>\n    </Context>\n\n    <ToneAndPersonality>\n        <Description>Amigável, eficiente e preciso, com emojis</Description>\n    </ToneAndPersonality>\n\n    <Instructions>\n        <Instruction01>Inicie a conversa perguntando ao usuário se deseja criar ou atualizar sua lista de compras</Instruction01>\n        <Instruction02>Peça ao usuário que forneça o nome do produto ou descrição do item que deseja adicionar à lista</Instruction02>\n        <Instruction03>Adicione o item à lista de compras e pergunte ao usuário se deseja adicionar outro item</Instruction03>\n        <Instruction04>Forneça opções para remover ou atualizar itens da lista de compras</Instruction04>\n        <Instruction05>Ofereça sugestões de produtos relacionados com base nos itens da lista de compras</Instruction05>\n        <Instruction06></Instruction06>\n    </Instructions>\n\n    <Constraints>\n        <Constraint01>Não forneça informações confidenciais ou pessoais</Constraint01>\n        <Constraint02>Apenas gerencie listas de compras para produtos disponíveis</Constraint02>\n        <Constraint03>Não faça recomendações de produtos que violem direitos autorais ou marcas registradas</Constraint03>\n    </Constraints>\n\n    <Examples>\n        <Example01>\n            <UserInput>Oi, eu quero criar uma lista de compras para o fim de semana</UserInput>\n            <AgentOutput>Claro! Qual é o primeiro item que você gostaria de adicionar à lista?</AgentOutput>\n        </Example01>\n        <Example02>\n            <UserInput>Eu quero adicionar leite e pão à minha lista</UserInput>\n            <AgentOutput>Ok! Adicionei leite e pão à sua lista de compras. Deseja adicionar outro item?</AgentOutput>\n        </Example02>\n        <Example03>\n            <UserInput>Eu quero remover o pão da lista</UserInput>\n            <AgentOutput>Ok! Removi o pão da sua lista de compras. Sua lista agora tem apenas leite.</AgentOutput>\n        </Example03>\n    </Examples>\n\n    <SuccessMetrics>\n        <Metric01>Taxa de satisfação do usuário</Metric01>\n        <Metric02>Número de itens adicionados à lista de compras</Metric02>\n        <Metric03>Número de sugestões de produtos relacionados aceitas pelo usuário</Metric03>\n    </SuccessMetrics>\n\n    <FallbackStrategies>\n        <Strategy01>Se o usuário tiver alguma dúvida ou precisar de ajuda, forneça instruções claras e concisas</Strategy01>\n        <Strategy02>Se o usuário não responder ou não fornecer informações suficientes, peça esclarecimentos</Strategy02>\n    </FallbackStrategies>\n</AgentInstructions>"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 1.8,
+        "position": [
+          860,
+          440
+        ],
+        "id": "b33b5b28-32de-4b66-a21b-d61eb9f016b8",
+        "name": "AI Agent",
+        "retryOnFail": false
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gpt-4o-mini"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          820,
+          660
+        ],
+        "id": "529c542e-a921-4796-bdea-c76d65852879",
+        "name": "OpenAI Chat Model",
+        "credentials": {
+          "openAiApi": {
+            "id": "baTia4Ert4KtVVIR",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://localhost:8080/message/sendText/01_ROBOT",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "={{ $('Webhook').item.json.body.apikey }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n    \"number\": \"{{ $('OUTPUT').item.json.contact.phone }}\",\n    \"text\": \"{{ $('Loop Over Items').item.json.output.replaceAll('\\n','\\\\n') }}\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2200,
+          440
+        ],
+        "id": "ed379b5e-3365-4f52-8053-9aee68c2b7b8",
+        "name": "Responde usuario"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://localhost:8080/chat/sendPresence/01_ROBOT",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apiKey",
+                "value": "={{ $('Webhook').item.json.body.apikey }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n    \"number\": \"{{ $('OUTPUT').item.json.contact.phone }}\",\n    \"delay\": 2000,\n    \"presence\": \"composing\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1960,
+          440
+        ],
+        "id": "839c0e61-4acd-4069-8db7-40c4e7c240d2",
+        "name": "Simula escrita"
+      },
+      {
+        "parameters": {
+          "resource": "audio",
+          "operation": "transcribe",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.openAi",
+        "typeVersion": 1.8,
+        "position": [
+          480,
+          40
+        ],
+        "id": "12ff20ff-e2a9-4588-958e-b70a3d12b5e7",
+        "name": "OpenAI",
+        "credentials": {
+          "openAiApi": {
+            "id": "baTia4Ert4KtVVIR",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "f1840662-53c7-4143-8575-880c44313091",
+                "name": "contact.phone",
+                "value": "={{ $json.body.data.key.remoteJid }}",
+                "type": "string"
+              },
+              {
+                "id": "6d963263-73e5-4fe9-960b-1f1af8c2dec6",
+                "name": "contact.name",
+                "value": "={{ $json.body.data.pushName }}",
+                "type": "string"
+              },
+              {
+                "id": "ca74c3ae-b15d-4430-a5be-36cab98a8f0c",
+                "name": "mimetype",
+                "value": "={{ $json.body.data.message.audioMessage.mimetype }}",
+                "type": "string"
+              },
+              {
+                "id": "c9d14a8c-ab9e-4433-afac-776154f53ca9",
+                "name": "base64",
+                "value": "={{ $json.body.data.message.base64 }}",
+                "type": "string"
+              },
+              {
+                "id": "3a12955f-d076-4324-8349-1739180938c8",
+                "name": "phone",
+                "value": "={{ $json.body.sender }}",
+                "type": "string"
+              },
+              {
+                "id": "7e3d87a3-bec9-49bd-81ea-f32881ce6ceb",
+                "name": "message_type",
+                "value": "={{ $json.body.data.messageType }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          60,
+          40
+        ],
+        "id": "4b7e6a61-3602-4721-82d2-528aa59c9298",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "operation": "toBinary",
+          "sourceProperty": "base64",
+          "options": {
+            "fileName": "contact-audio.ogg",
+            "mimeType": "={{ $json.mimetype }}"
+          }
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          260,
+          40
+        ],
+        "id": "ad88be96-822b-413c-b16a-51e97c784f56",
+        "name": "Convert to File"
+      },
+      {
+        "parameters": {
+          "content": "audio",
+          "height": 200,
+          "width": 640,
+          "color": 5
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -20,
+          0
+        ],
+        "typeVersion": 1,
+        "id": "6976b869-fb01-46bd-8a3c-36b8c2694677",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $('OUTPUT').item.json.contact.phone }}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          980,
+          660
+        ],
+        "id": "49634f63-246b-4388-a12e-5900f31e903a",
+        "name": "Simple Memory"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "9f150f2e-67bd-422f-b6e4-38970ff2606b",
+                "name": "contact.message",
+                "value": "={{ $json.body.data.message.conversation }}",
+                "type": "string"
+              },
+              {
+                "id": "6f29086c-950f-4ffd-8085-872a457252ae",
+                "name": "contact.phone",
+                "value": "={{ $json.body.data.key.remoteJid }}",
+                "type": "string"
+              },
+              {
+                "id": "8fe3236e-5069-4fb1-afe7-f31f995cb65b",
+                "name": "contact.name",
+                "value": "={{ $json.body.data.pushName }}",
+                "type": "string"
+              },
+              {
+                "id": "f9746e86-31d1-4fda-8d5e-ce62746ac3b2",
+                "name": "phone",
+                "value": "={{ $json.body.sender }}",
+                "type": "string"
+              },
+              {
+                "id": "eb40e571-d674-4657-b6a9-684e3e5d6d53",
+                "name": "message_type",
+                "value": "={{ $json.body.data.messageType }}",
+                "type": "string"
+              },
+              {
+                "id": "55636d96-e73e-4bf2-afed-c7d4446603ff",
+                "name": "date",
+                "value": "={{ $json.body.date_time }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          320,
+          500
+        ],
+        "id": "540fdd94-aea3-4a23-aac2-ddd4ea051bac",
+        "name": "formata texto"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "9f150f2e-67bd-422f-b6e4-38970ff2606b",
+                "name": "contact.message",
+                "value": "={{ $json.text }}",
+                "type": "string"
+              },
+              {
+                "id": "6f29086c-950f-4ffd-8085-872a457252ae",
+                "name": "contact.phone",
+                "value": "={{ $('Edit Fields').item.json.contact.phone }}",
+                "type": "string"
+              },
+              {
+                "id": "b5675002-8f5f-417d-824f-b8baaea2dde5",
+                "name": "=contact.name",
+                "value": "={{ $('Edit Fields').item.json.contact.name }}",
+                "type": "string"
+              },
+              {
+                "id": "8fe3236e-5069-4fb1-afe7-f31f995cb65b",
+                "name": "name",
+                "value": "={{ $('Edit Fields').item.json.contact.name }}",
+                "type": "string"
+              },
+              {
+                "id": "4761abf1-65a7-43d5-9f72-9b0d6dc327e9",
+                "name": "phone",
+                "value": "={{ $('Edit Fields').item.json.phone }}",
+                "type": "string"
+              },
+              {
+                "id": "c00f3517-b202-4fb8-89ef-17ea302e5280",
+                "name": "message_type",
+                "value": "={{ $('Edit Fields').item.json.message_type }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          320,
+          300
+        ],
+        "id": "2d1333fc-26ad-472b-a9ee-0e611494db01",
+        "name": "formata saida de audio texto"
+      },
+      {
+        "parameters": {
+          "batchSize": "=1",
+          "options": {
+            "reset": false
+          }
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          1680,
+          440
+        ],
+        "id": "1a08dace-6142-4fcf-9aa8-ded74d93aead",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "amount": 3
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          2400,
+          440
+        ],
+        "id": "b7e4a2ef-9e35-452c-be04-97f91418f185",
+        "name": "Wait",
+        "webhookId": "6729242f-4b7c-4cf7-88c8-07bf4979c48c"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "=output",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1440,
+          440
+        ],
+        "id": "8d3216d9-ecec-4fd3-afe7-384599a9fa67",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "1228fc8e-d77b-4550-b057-e836d4231e9e",
+                "name": "output",
+                "value": "={{ $json.output.replaceAll(\"\\\"\",\"'\").split(\"\\n\\n\") }}",
+                "type": "array"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1240,
+          440
+        ],
+        "id": "8775d68e-3ca2-4a12-a471-c03178bed065",
+        "name": "Edit Fields1"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "9f150f2e-67bd-422f-b6e4-38970ff2606b",
+                "name": "contact.message",
+                "value": "={{ $json.contact.message }}",
+                "type": "string"
+              },
+              {
+                "id": "6f29086c-950f-4ffd-8085-872a457252ae",
+                "name": "contact.phone",
+                "value": "={{ $json.contact.phone }}",
+                "type": "string"
+              },
+              {
+                "id": "8fe3236e-5069-4fb1-afe7-f31f995cb65b",
+                "name": "contact.name",
+                "value": "={{ $json.contact.name }}",
+                "type": "string"
+              },
+              {
+                "id": "f9746e86-31d1-4fda-8d5e-ce62746ac3b2",
+                "name": "phone",
+                "value": "={{ $json.phone }}",
+                "type": "string"
+              },
+              {
+                "id": "eb40e571-d674-4657-b6a9-684e3e5d6d53",
+                "name": "message_type",
+                "value": "={{ $json.message_type }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          620,
+          440
+        ],
+        "id": "58012fed-6b9c-4dd3-b786-66f7db4b0387",
+        "name": "OUTPUT"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "formata texto",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Responde usuario": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simula escrita": {
+        "main": [
+          [
+            {
+              "node": "Responde usuario",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI": {
+        "main": [
+          [
+            {
+              "node": "formata saida de audio texto",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Convert to File",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Convert to File": {
+        "main": [
+          [
+            {
+              "node": "OpenAI",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simple Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "formata texto": {
+        "main": [
+          [
+            {
+              "node": "OUTPUT",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "formata saida de audio texto": {
+        "main": [
+          [
+            {
+              "node": "OUTPUT",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Simula escrita",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields1": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OUTPUT": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "pinData": {},
+    "meta": {
+      "templateCredsSetupCompleted": true,
+      "instanceId": "6617f74ec0b59350c2ed872c79f41e52f7950ad3f974d162c3fccba908fc5333"
+    }
+  }
