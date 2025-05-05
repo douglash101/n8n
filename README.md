@@ -60,3 +60,10 @@ Certifique-se de que nenhuma das portas utilizadas (5432, 6379, 5678, 8080) este
 4. **Acesse os serviços:**
 - n8n: http://localhost:5678
 - Evolution API: http://localhost:8080
+
+---
+
+## 🛠️ Requisitos
+- Docker
+- Docker Compose
+- Sistema operacional Linux/Windows 
